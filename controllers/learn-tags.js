@@ -109,6 +109,5 @@ const searchByAttributes = (options, attributesToSkip = []) => (virtualDOM) => {
 module.exports = {
     searchOnlyTag,
     searchById,
-    searchByAttributes,
-    searchByParentWithAttributesAndTag
+    searchByAttributes
 };
