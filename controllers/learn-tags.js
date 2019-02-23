@@ -3,11 +3,13 @@ const {getAttributesFromString} = require('../utils/selectors');
 // Имеет смысл для заголовков (h*) и редких тегов
 const defaultResultOptions = {
     result: false,
-    onlyTag: false,
-    allAttributes: false,
-    searchById: false,
-    partialAttributes: false,
-    searchWithParantAttributes: false,
+    selectedMethodic: {
+        onlyTag: false,
+        allAttributes: false,
+        searchById: false,
+        partialAttributes: false,
+        searchWithParantAttributes: false,
+    },
     elementsLength: 0,
     resultNumber: 0
 };
@@ -15,8 +17,11 @@ const defaultResultOptions = {
 const searchOnlyTag = (options) => (virtualDOM) => {
     const resultObject = {
         ...defaultResultOptions,
-        onlyTag: true,
-        tagName: options.tagName
+        tagName: options.tagName,
+        selectedMethodic: {
+            ...defaultResultOptions.selectedMethodic,
+            onlyTag: true
+        }
     };
     const allElements = virtualDOM.document.getElementsByTagName(options.tagName);
     if (!allElements.length) {
@@ -39,9 +44,12 @@ const searchById = (options) => (virtualDOM) => {
     }
     let resultObject = {
         ...defaultResultOptions,
-        searchById: true,
         tagName: options.tagName,
-        attributeId: options.attributes.id
+        attributeId: options.attributes.id,
+        selectedMethodic: {
+            ...defaultResultOptions.selectedMethodic,
+            searchById: true
+        }
     };
     const allElements = virtualDOM.document.getElementById(options.attributes.id);
     if (!allElements) {
@@ -58,9 +66,12 @@ const searchByAttributes = (options, attributesToSkip = []) => (virtualDOM) => {
     const allAttributes = !!attributesToSkip.length;
     let resultObject = {
         ...defaultResultOptions,
-        allAttributes,
-        partialAttributes: !allAttributes,
-        tagName: options.tagName
+        tagName: options.tagName,
+        selectedMethodic: {
+            ...defaultResultOptions.selectedMethodic,
+            allAttributes,
+            partialAttributes: !allAttributes,
+        }
     };
     const attributes = {...options.attributes};
     const {tagName} = options;
@@ -97,8 +108,11 @@ const searchByAttributes = (options, attributesToSkip = []) => (virtualDOM) => {
 const searchByParentWithAttributesAndTag = (options) => (virtualDOM) => {
     let resultObject = {
         ...defaultResultOptions,
-        searchWithParantAttributes: true,
-        tagName: options.tagName
+        tagName: options.tagName,
+        selectedMethodic: {
+            ...defaultResultOptions.selectedMethodic,
+            searchWithParantAttributes: true
+        }
     };
     if (!options.parentAttributes || !options.parentTagName || !options.tagName) {
         return false;

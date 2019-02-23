@@ -11,7 +11,7 @@ const {chooseMethod} = require('./controllers/select-tags');
 // Мы пытаемся найти информацию, запоминаем тег, аттрибуты
 getPageRequest('https://www.vasmann.ru/dileram')    
     .then(htmlCode => {
-        return findClosestTag('От 6-ти поддонов')(htmlCode)
+        return findClosestTag('Оставьте заявку и мы свяжемся с Вами в течении 10 минут')(htmlCode)
             .then(tag => {
                 return createVirtualDOM(htmlCode)
                     .then(virtualDOM => {
