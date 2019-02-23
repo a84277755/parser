@@ -9,9 +9,9 @@ const {chooseMethod} = require('./controllers/select-tags');
 // Обучение (получение информации)
 // Пользователь указывает страницу и какую информацию он хочет извлечь (текст)
 // Мы пытаемся найти информацию, запоминаем тег, аттрибуты
-getPageRequest('https://spb.cian.ru/sale/commercial/194871174/')    
+getPageRequest('https://www.rsb.ru/cards/bvk-multiplatinum/')    
     .then(htmlCode => {
-        return findClosestTag('Офис, 79 м')(htmlCode)
+        return findClosestTag('Одна карта — 3 счета')(htmlCode)
             .then(tag => {
                 return createVirtualDOM(htmlCode)
                     .then(virtualDOM => {

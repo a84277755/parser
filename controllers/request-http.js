@@ -24,7 +24,7 @@ const createRequest = ({hostname, path, protocol}) => {
             let receivedData = '';
             res.setEncoding('utf8');
             res.on('data', (chunk) => {
-                receivedData += chunk.toString();
+                receivedData += chunk.toString().replace(/&ndash;/g,'-').replace(/&nbsp;/g,' ').replace(/\s{2,}/g,' ');
             });
             res.on('end', () => {
               resolve(receivedData);
