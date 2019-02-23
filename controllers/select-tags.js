@@ -1,5 +1,5 @@
 // Здесь мы будем выбирать методики по поиску тегов
-const {searchOnlyTag, searchById, searchByAllAttributes, searchByParentWithAttributesAndTag} = require('./learn-tags');
+const {searchOnlyTag, searchById, searchByAttributes, searchByParentWithAttributesAndTag} = require('./learn-tags');
 
 const chooseMethod = (options) => {
     const {
@@ -16,7 +16,7 @@ const chooseMethod = (options) => {
 
     if (idExists) return searchById(options);
     if (parentTagName && hasParrentAttributes) return searchByParentWithAttributesAndTag(options);
-    if (hasAttributes) return searchByAllAttributes(options);
+    if (hasAttributes) return searchByAttributes(options);
     return searchOnlyTag(options);
 };
 

@@ -6,13 +6,14 @@ const defaultResultOptions = {
     onlyTag: false,
     allAttributes: false,
     searchById: false,
+    partialAttributes: false,
     searchWithParantAttributes: false,
     elementsLength: 0,
     resultNumber: 0
 };
 
 const searchOnlyTag = (options) => (virtualDOM) => {
-    let resultObject = {
+    const resultObject = {
         ...defaultResultOptions,
         onlyTag: true,
         tagName: options.tagName
@@ -52,14 +53,27 @@ const searchById = (options) => (virtualDOM) => {
     return resultObject;
 };
 
-// Поиск по ВСЕМ атрибутам (с указанием тега)
-const searchByAllAttributes = (options) => (virtualDOM) => {
+// Поиск по атрибутам (по умолчанию по всем) (с указанием тега)
+const searchByAttributes = (options, attributesToSkip = []) => (virtualDOM) => {
+    const allAttributes = !!attributesToSkip.length;
     let resultObject = {
         ...defaultResultOptions,
-        allAttributes: true,
+        allAttributes,
+        partialAttributes: !allAttributes,
         tagName: options.tagName
     };
+    const attributes = {...options.attributes};
     const {tagName} = options;
+
+    if (!Object.keys(attributes).length) {
+        return false;
+    }
+    
+    // remove not required props
+    attributesToSkip.forEach(attribute => {
+        delete attributes[attribute];
+    });
+
     const parsedAttributes = getAttributesFromString(options.attributes);
     const selector = `${tagName}${parsedAttributes}`
     const allElements = virtualDOM.document.documentElement.querySelectorAll(selector);
@@ -67,8 +81,9 @@ const searchByAllAttributes = (options) => (virtualDOM) => {
     if (!allElements.length) {
         return resultObject;
     }
-    
+
     resultObject.elementsLength = allElements.length;
+    resultObject.selector = selector;
     allElements.forEach((elem, id) => {
         if (!resultObject.result && elem.textContent === options.resultText) {
             resultObject.result = true;
@@ -78,7 +93,6 @@ const searchByAllAttributes = (options) => (virtualDOM) => {
     return resultObject;
 };
 
-
 // Поиск по ВСЕМ атрибутам (с указанием тега)
 const searchByParentWithAttributesAndTag = (options) => (virtualDOM) => {
     let resultObject = {
@@ -87,7 +101,7 @@ const searchByParentWithAttributesAndTag = (options) => (virtualDOM) => {
         tagName: options.tagName
     };
     if (!options.parentAttributes || !options.parentTagName || !options.tagName) {
-        return resultObject;
+        return false;
     }
     const {parentTagName, tagName} = options;
 
@@ -102,6 +116,8 @@ const searchByParentWithAttributesAndTag = (options) => (virtualDOM) => {
     }
 
     resultObject.elementsLength = allElements.length;
+    resultObject.parentTagName = parentTagName;
+    resultObject.selector = selector;
     allElements.forEach((elem, id) => {
         if (!resultObject.result && elem.textContent === options.resultText) {
             resultObject.result = true;
@@ -114,6 +130,6 @@ const searchByParentWithAttributesAndTag = (options) => (virtualDOM) => {
 module.exports = {
     searchOnlyTag,
     searchById,
-    searchByAllAttributes,
+    searchByAttributes,
     searchByParentWithAttributesAndTag
 };
