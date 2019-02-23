@@ -58,9 +58,7 @@ const searchByAllAttributes = (options) => (virtualDOM) => {
         resultNumber: 0,
         tagName: options.tagName
     };
-    console.log(options);
     const attributes = Object.keys(options.attributes).reduce((result, key) => {
-        console.log('key > ', key, options.attributes[key]);
         const selector = options.attributes[key] === true ? key : `${key}="${options.attributes[key]}"`;
         return `${result}[${selector}]`;
     }, '');
