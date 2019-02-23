@@ -26,8 +26,7 @@ const createRequest = ({hostname, path, protocol}) => {
             res.on('data', (chunk) => {
                 receivedData += chunk.toString()
                     .replace(/&ndash;/g,'-')
-                    .replace(/&nbsp;/g,' ')
-                    .replace(/\s{2,}/g,' ')
+                    .replace(/(&nbsp;)|(<br>)|(<br\/>)|(<br \/>)|(\s{2,})/g,' ')
                     .toLowerCase();
             });
             res.on('end', () => {
