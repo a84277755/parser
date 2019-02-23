@@ -9,9 +9,9 @@ const {chooseMethod} = require('./controllers/select-tags');
 // Обучение (получение информации)
 // Пользователь указывает страницу и какую информацию он хочет извлечь (текст)
 // Мы пытаемся найти информацию, запоминаем тег, аттрибуты
-getPageRequest('https://news.mail.ru/society/36408394/')    
+getPageRequest('http://realtmsk.ru/uslugi/proverka-objekta')    
     .then(htmlCode => {
-        return findClosestTag('В Эстонии спасли волка, перепутав его с собакой (фото)')(htmlCode)
+        return findClosestTag('Неправильно составленные договоры дарения, приобретения, обмен')(htmlCode)
             .then(tag => {
                 return createVirtualDOM(htmlCode)
                     .then(virtualDOM => {

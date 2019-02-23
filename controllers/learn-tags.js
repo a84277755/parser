@@ -9,12 +9,12 @@ const searchOnlyTag = (options) => (virtualDOM) => {
         resultNumber: 0,
         tagName: options.tagName
     };
-    const allElements = virtualDOM.document.documentElement.searchByTagName(options.tagName);
+    const allElements = virtualDOM.document.getElementsByTagName(options.tagName);
     if (!allElements.length) {
         return resultObject;
     }
     resultObject.elementsLength = allElements.length;
-    allElements.forEach((elem, id) => {
+    [...allElements].forEach((elem, id) => {
         if (!resultObject.result && elem.textContent === options.resultText) {
             resultObject.result = true;
             resultObject.resultNumber = id + 1;
@@ -58,8 +58,11 @@ const searchByAllAttributes = (options) => (virtualDOM) => {
         resultNumber: 0,
         tagName: options.tagName
     };
+    console.log(options);
     const attributes = Object.keys(options.attributes).reduce((result, key) => {
-        return `${result}[${key}="${options.attributes[key]}"]`;
+        console.log('key > ', key, options.attributes[key]);
+        const selector = options.attributes[key] === true ? key : `${key}="${options.attributes[key]}"`;
+        return `${result}[${selector}]`;
     }, '');
     const selector = `${options.tagName}${attributes}`
     const allElements = virtualDOM.document.documentElement.querySelectorAll(selector);

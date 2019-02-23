@@ -21,6 +21,7 @@ const findClosestTag = searchText => HTMLCode => {
         const foundAttributes = result[2].trim();
         if (foundAttributes) {
             foundAttributes.replace(/\s{2,}/g,' ').trim().split(' ').forEach(attribute => {
+                if (/[><\/]/.test(attribute)) return false;
                 const [key, value] = attribute.split('=');
                 attributes[key] = value ? value.replace(/"/g, '') : true;
             })
