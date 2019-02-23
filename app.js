@@ -1,5 +1,5 @@
 const {getPageRequest} = require('./controllers/request-http');
-const {createVirtualDOM, findClosestTag} = require('./controllers/parse-tags');
+const {createVirtualDOM, findClosestTag, findClosestTagWithAttributes} = require('./controllers/parse-tags');
 const {chooseMethod} = require('./controllers/select-tags');
 
 // getPageRequest('http://realtmsk.ru/uslugi/soprovozhdenie-sdelki').then(createVirtualDOM).then(virtualDOM => {
@@ -9,9 +9,9 @@ const {chooseMethod} = require('./controllers/select-tags');
 // Обучение (получение информации)
 // Пользователь указывает страницу и какую информацию он хочет извлечь (текст)
 // Мы пытаемся найти информацию, запоминаем тег, аттрибуты
-getPageRequest('http://realtmsk.ru/uslugi/proverka-objekta')    
+getPageRequest('https://www.vasmann.ru/montagnaya-pena')    
     .then(htmlCode => {
-        return findClosestTag('Неправильно составленные договоры дарения, приобретения, обмен')(htmlCode)
+        return findClosestTagWithAttributes('VASmann thermofoam')(htmlCode)
             .then(tag => {
                 return createVirtualDOM(htmlCode)
                     .then(virtualDOM => {
