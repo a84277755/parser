@@ -7,6 +7,7 @@ const getAttributesFromFoundString = (foundAttributes) =>
         .reduce((result, attribute) => {
         if (/[><\/]/.test(attribute)) return result;
         const [key, value] = attribute.split('=');
+        if (!key) return result;
         return {...result, [key]: value ? value.replace(/"/g, '') : true};
     }, {});
 

@@ -25,6 +25,7 @@ const findClosestTag = searchText => HTMLCode => {
     if (result) {
         let attributes = {};
         const foundAttributes = result[2].trim();
+        console.log('foundAttributes >> ', foundAttributes);
         const attributesParsed = getAttributesFromFoundString(foundAttributes);
         return Promise.resolve({
             attributes: {...attributesParsed},
