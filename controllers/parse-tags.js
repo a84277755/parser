@@ -14,13 +14,12 @@ const createVirtualDOM = (HTMLCode) => {
 
 const findClosestTag = searchText => HTMLCode => {
     const pureHTMLCode = HTMLCode.replace(/&nbsp;/g,' ');
-    const regExp = new RegExp(`<([\\d\\w]{1,10})([\\s\\S]{0,100})>(.{0,3}${getSafetyText(searchText)}.{0,3})<\/.{1,10}>`);
+    const regExp = new RegExp('<([\\d\\w]{1,10})([\\s\\S]{0,150})>(.{0,3}' + getSafetyText(searchText) + '.{0,3})<\/\\1>');
     const result = pureHTMLCode.match(regExp);
     if (result) {
-        let attributes = null;
+        let attributes = {};
         const foundAttributes = result[2].trim();
         if (foundAttributes) {
-            attributes = {};
             foundAttributes.replace(/\s{2,}/g,' ').trim().split(' ').forEach(attribute => {
                 const [key, value] = attribute.split('=');
                 attributes[key] = value ? value.replace(/"/g, '') : true;
