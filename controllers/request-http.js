@@ -1,3 +1,6 @@
+//
+// Здесь происходит получение HTML страницы
+//
 const https = require('https');
 const http = require('http');
 

@@ -1,6 +1,7 @@
-const {getAttributesFromString} = require('../utils/selectors');
-// Найти информацию ТОЛЬКО по тегу
-// Имеет смысл для заголовков (h*) и редких тегов
+//
+// Здесь происходит поиск по DOM дереву и возвращение результата
+//
+const {getSelectorFromAttributesFromString} = require('../utils/selectors');
 const defaultResultOptions = {
     result: false,
     selectedMethodic: {
@@ -14,6 +15,8 @@ const defaultResultOptions = {
     resultNumber: 0
 };
 
+// Найти информацию ТОЛЬКО по тегу
+// Имеет смысл для заголовков (h*) и редких тегов
 const searchOnlyTag = (options) => (virtualDOM) => {
     const resultObject = {
         ...defaultResultOptions,
@@ -84,8 +87,7 @@ const searchByAttributes = (options, attributesToSkip = []) => (virtualDOM) => {
     attributesToSkip.forEach(attribute => {
         delete attributes[attribute];
     });
-
-    const parsedAttributes = getAttributesFromString(options.attributes);
+    const parsedAttributes = getSelectorFromAttributesFromString(attributes);
     const selector = `${tagName}${parsedAttributes}`
     const allElements = virtualDOM.document.documentElement.querySelectorAll(selector);
     
@@ -119,8 +121,8 @@ const searchByParentWithAttributesAndTag = (options) => (virtualDOM) => {
     }
     const {parentTagName, tagName} = options;
 
-    const parsedParentAttributes = getAttributesFromString(options.parentAttributes);
-    const parsedAttributes = getAttributesFromString(options.attributes);
+    const parsedParentAttributes = getSelectorFromAttributesFromString(options.parentAttributes);
+    const parsedAttributes = getSelectorFromAttributesFromString(options.attributes);
 
     const selector = `${parentTagName}${parsedParentAttributes} ${tagName}${parsedAttributes}`
     const allElements = virtualDOM.document.documentElement.querySelectorAll(selector);

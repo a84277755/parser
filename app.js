@@ -11,7 +11,7 @@ const {chooseMethod} = require('./controllers/select-tags');
 // Мы пытаемся найти информацию, запоминаем тег, аттрибуты
 getPageRequest('https://spb.cian.ru/sale/flat/196629031/')    
     .then(htmlCode => {
-        return findClosestTag('3-комн. квартира, 79,5 м')(htmlCode)
+        return findClosestTag('в ЖК «Legenda Комендантского (Легенда Комендантского)»')(htmlCode)
             .then(tag => {
                 return createVirtualDOM(htmlCode)
                     .then(virtualDOM => {
