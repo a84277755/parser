@@ -14,7 +14,7 @@ const createVirtualDOM = (HTMLCode) => {
 
 const findClosestTag = searchText => HTMLCode => {
     const pureHTMLCode = HTMLCode.replace(/&nbsp;/g,' ');
-    const regExp = new RegExp('<([\\d\\w]{1,10})([\\s\\S]{0,150})>(.{0,3}' + getSafetyText(searchText) + '.{0,3})<\/\\1>');
+    const regExp = new RegExp('<([\\d\\w]{1,10})([\\s\\S]{0,200})>(.{0,3}' + getSafetyText(searchText) + '.{0,3})<\/\\1>');
     const result = pureHTMLCode.match(regExp);
     if (result) {
         let attributes = {};
@@ -25,14 +25,14 @@ const findClosestTag = searchText => HTMLCode => {
                 attributes[key] = value ? value.replace(/"/g, '') : true;
             })
         }
-        return {
+        return Promise.resolve({
             attributes,
             tagName: result[1],
             searchedText: searchText,
             resultText: result[3]
-        };
+        });
     }
-    return null;
+    return Promise.reject({message: 'В HTML странице совпадения не найдены'});
 };
 
 module.exports = {

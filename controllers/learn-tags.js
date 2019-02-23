@@ -4,11 +4,12 @@ const searchOnlyTag = (options) => (virtualDOM) => {
     let resultObject = {
         result: false,
         onlyTag: true,
+        allAttributes: false,
         elementsLength: 0,
         resultNumber: 0,
         tagName: options.tagName
     };
-    const allElements = virtualDOM.document.documentElement.querySelectorAll(`${options.tagName}`);
+    const allElements = virtualDOM.document.documentElement.searchByTagName(options.tagName);
     if (!allElements.length) {
         return resultObject;
     }
@@ -30,6 +31,7 @@ const searchById = (options) => (virtualDOM) => {
     let resultObject = {
         result: false,
         onlyTag: false,
+        allAttributes: false,
         searchById: true,
         elementsLength: 0,
         resultNumber: 0,
@@ -47,16 +49,17 @@ const searchById = (options) => (virtualDOM) => {
 };
 
 // Поиск по ВСЕМ атрибутам (с указанием тега)
-const searchByAllTags = (options) => (virtualDOM) => {
+const searchByAllAttributes = (options) => (virtualDOM) => {
     let resultObject = {
         result: false,
-        onlyTag: true,
+        onlyTag: false,
+        allAttributes: true,
         elementsLength: 0,
         resultNumber: 0,
         tagName: options.tagName
     };
     const attributes = Object.keys(options.attributes).reduce((result, key) => {
-        result += ` ${key}=${options.attributes[key]}`;
+        return `${result}[${key}="${options.attributes[key]}"]`;
     }, '');
     const selector = `${options.tagName}${attributes}`
     const allElements = virtualDOM.document.documentElement.querySelectorAll(selector);
@@ -76,5 +79,5 @@ const searchByAllTags = (options) => (virtualDOM) => {
 module.exports = {
     searchOnlyTag,
     searchById,
-    searchByAllTags
+    searchByAllAttributes
 };
