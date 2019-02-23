@@ -16,21 +16,21 @@ const createVirtualDOM = (HTMLCode) => {
 
 // Найти непосредственно сам элемент
 const findClosestTag = searchText => HTMLCode => {
-    const fastSearchResult = ~HTMLCode.indexOf(searchText);
+    const text = searchText.toLowerCase();
+    const fastSearchResult = ~HTMLCode.indexOf(text);
     if (!fastSearchResult) {
         return Promise.reject({message: 'В HTML странице совпадения не найдены'});
     }
-    const regExp = new RegExp('<([\\d\\w]{1,10})([\\s\\S]{0,200})>(.{0,3}' + getSafetyText(searchText) + '.{0,3})<\/\\1>');
+    const regExp = new RegExp('<([\\d\\w]{1,10})([\\s\\d\\w\'\"\;\#\-\=]{0,200})>(.{0,3}' + getSafetyText(text) + '.{0,3})<\/\\1>');
     const result = HTMLCode.match(regExp);
     if (result) {
         let attributes = {};
         const foundAttributes = result[2].trim();
-        console.log('foundAttributes >> ', foundAttributes);
         const attributesParsed = getAttributesFromFoundString(foundAttributes);
         return Promise.resolve({
             attributes: {...attributesParsed},
             tagName: result[1],
-            searchedText: searchText,
+            searchedText: text,
             resultText: result[3]
         });
     }
@@ -42,11 +42,12 @@ const findClosestTagWithAttributes = (
     searchText,
     {closestSymbolsStart, closestSymbolsEnd} = {closestSymbolsStart: 200, closestSymbolsEnd: 150}
 ) => HTMLCode => {
-    const fastSearchResult = ~HTMLCode.indexOf(searchText);
+    const text = searchText.toLowerCase();
+    const fastSearchResult = ~HTMLCode.indexOf(text);
     if (!fastSearchResult) {
         return Promise.reject({message: 'В HTML странице совпадения не найдены'});
     }
-    const regExp = new RegExp('<([\\d\\w]{1,10})([\\s\\S]{5,200})>[\\s\\S]{0,' + closestSymbolsStart + '}<([\\d\\w]{1,10})([\\s\\S]{0,200})>(.{0,3}' + getSafetyText(searchText) + '.{0,3})<\/\\3>[\\s\\S]{0,' + closestSymbolsEnd + '}<\/\\1>');
+    const regExp = new RegExp('<([\\d\\w]{1,10})([\\s\\d\\w\'\"\;\#\-\=]{5,200})>[\\s\\S]{0,' + closestSymbolsStart + '}<([\\d\\w]{1,10})([\\s\\d\\w\'\"\;\#\-\=]{0,200})>(.{0,3}' + getSafetyText(text) + '.{0,3})<\/\\3>[\\s\\S]{0,' + closestSymbolsEnd + '}<\/\\1>');
     const result = HTMLCode.match(regExp);
     if (result) {
         const foundAttributes = result[4].trim();
@@ -62,7 +63,7 @@ const findClosestTagWithAttributes = (
             parentAttributes: {...parentAttributesParsed},
             parentTagName: result[1],
             tagName: result[3],
-            searchedText: searchText,
+            searchedText: text,
             resultText: result[5]
         });
     }

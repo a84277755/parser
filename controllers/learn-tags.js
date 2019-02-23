@@ -9,7 +9,7 @@ const defaultResultOptions = {
         allAttributes: false,
         searchById: false,
         partialAttributes: false,
-        searchWithParantAttributes: false,
+        searchWithParentAttributes: false,
     },
     elementsLength: 0,
     resultNumber: 0
@@ -82,7 +82,7 @@ const searchByAttributes = (options, attributesToSkip = []) => (virtualDOM) => {
     if (!Object.keys(attributes).length) {
         return false;
     }
-    
+
     // remove not required props
     attributesToSkip.forEach(attribute => {
         delete attributes[attribute];
@@ -113,7 +113,7 @@ const searchByParentWithAttributesAndTag = (options) => (virtualDOM) => {
         tagName: options.tagName,
         selectedMethodic: {
             ...defaultResultOptions.selectedMethodic,
-            searchWithParantAttributes: true
+            searchWithParentAttributes: true
         }
     };
     if (!options.parentAttributes || !options.parentTagName || !options.tagName) {
