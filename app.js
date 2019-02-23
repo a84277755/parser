@@ -9,9 +9,9 @@ const {chooseMethod} = require('./controllers/select-tags');
 // Обучение (получение информации)
 // Пользователь указывает страницу и какую информацию он хочет извлечь (текст)
 // Мы пытаемся найти информацию, запоминаем тег, аттрибуты
-getPageRequest('https://spb.cian.ru/sale/flat/196629031/')    
+getPageRequest('https://spb.cian.ru/sale/commercial/194871174/')    
     .then(htmlCode => {
-        return findClosestTag('в ЖК «Legenda Комендантского (Легенда Комендантского)»')(htmlCode)
+        return findClosestTag('Офис, 79 м')(htmlCode)
             .then(tag => {
                 return createVirtualDOM(htmlCode)
                     .then(virtualDOM => {

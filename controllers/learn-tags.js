@@ -66,7 +66,7 @@ const searchById = (options) => (virtualDOM) => {
 
 // Поиск по атрибутам (по умолчанию по всем) (с указанием тега)
 const searchByAttributes = (options, attributesToSkip = []) => (virtualDOM) => {
-    const allAttributes = !!attributesToSkip.length;
+    const allAttributes = !attributesToSkip.length;
     let resultObject = {
         ...defaultResultOptions,
         tagName: options.tagName,
