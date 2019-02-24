@@ -14,13 +14,18 @@ const {searchParentAndGetOnlyTag} = require('./controllers/learn-tags');
 // Обучение (получение информации)
 // Пользователь указывает страницу и какую информацию он хочет извлечь (текст)
 // Мы пытаемся найти информацию, запоминаем тег, аттрибуты
-getPageRequest('https://www.vasmann.ru/dileram')    
+const URL = 'https://www.vasmann.ru/dileram';
+const TEXT = 'Стабильное немецкое качество продукции';
+getPageRequest(URL)    
     .then(htmlCode => {
-        return findClosestTag('Стабильное немецкое качество продукции')(htmlCode)
+        return findClosestTag({searchText: TEXT, url: URL})(htmlCode)
             .then(tag => {
                 return createVirtualDOM(htmlCode)
                     .then(virtualDOM => {
-                        console.log(searchParentAndGetOnlyTag(chooseMethodForSearchingOnlyTag(tag)(virtualDOM))(virtualDOM));
+                        searchParentAndGetOnlyTag(chooseMethodForSearchingOnlyTag(tag)(virtualDOM))(virtualDOM)
+                            .then(data => {
+                                console.log("DATA : ", data);
+                            });
                     })
             })
     })

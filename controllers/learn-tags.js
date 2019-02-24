@@ -30,7 +30,8 @@ const searchOnlyTag = (options) => (virtualDOM) => {
         selectedMethodic: {
             ...defaultResultOptions.selectedMethodic,
             onlyTag: true
-        }
+        },
+        url: options.url || null
     };
     const allElements = virtualDOM.document.getElementsByTagName(options.tagName);
     if (!allElements.length) {
@@ -41,6 +42,7 @@ const searchOnlyTag = (options) => (virtualDOM) => {
         if (!resultObject.result && elem.textContent === options.resultText) {
             resultObject.result = true;
             resultObject.resultNumber = id + 1;
+            resultObject.resultText = elem.textContent;
         }
     });
     return resultObject;
@@ -58,7 +60,8 @@ const searchById = (options) => (virtualDOM) => {
         selectedMethodic: {
             ...defaultResultOptions.selectedMethodic,
             searchById: true
-        }
+        },
+        url: options.url || null
     };
     const allElements = virtualDOM.document.getElementById(options.attributes.id);
     if (!allElements) {
@@ -66,6 +69,7 @@ const searchById = (options) => (virtualDOM) => {
     }
     resultObject.elementsLength = 1;
     resultObject.resultNumber = 1;
+    resultObject.resultText = allElements.textContent;
     resultObject.result = true;
     return resultObject;
 };
@@ -80,7 +84,8 @@ const searchByAttributes = (options, attributesToSkip = []) => (virtualDOM) => {
             ...defaultResultOptions.selectedMethodic,
             allAttributes,
             partialAttributes: !allAttributes,
-        }
+        },
+        url: options.url || null
     };
     const attributes = {...options.attributes};
     const {tagName} = options;
@@ -107,6 +112,7 @@ const searchByAttributes = (options, attributesToSkip = []) => (virtualDOM) => {
         if (!resultObject.result && elem.textContent === options.resultText) {
             resultObject.result = true;
             resultObject.resultNumber = id + 1;
+            resultObject.resultText = elem.textContent;
         }
     });
     return resultObject;
@@ -116,9 +122,21 @@ const searchByAttributes = (options, attributesToSkip = []) => (virtualDOM) => {
 // Модификация предыдущих методов
 // Поиск родителя (и определение его селектора) (поиск единственного результата)
 const searchParentAndGetOnlyTag = (resultSearchingTag) => (virtualDOM) => {
-    const {result, selectedMethodic, elementsLength, resultNumber, tagName, selector} = resultSearchingTag;
+    const {
+        result,
+        selectedMethodic,
+        elementsLength,
+        resultNumber,
+        tagName,
+        selector,
+        url,
+        resultText
+    } = resultSearchingTag;
     if (!resultSearchingTag) {
         return {error: 'Результаты предыдущего поиска были неуспешны', lastResult: {...resultSearchingTag}};
+    }
+    if (!url) {
+        return {error: 'Не пришел URL от прошлого запроса', lastResult: {...resultSearchingTag}};
     }
 
     // Если поиск по ID, то на нормальном сайте всего 1 результат и так будет
@@ -141,7 +159,9 @@ const searchParentAndGetOnlyTag = (resultSearchingTag) => (virtualDOM) => {
             lastLength: elementsLength,
             virtualDOM,
             oldSelector: tagName,
-            baseNode: neededElement
+            baseNode: neededElement,
+            url,
+            resultText
         });
         return bestSelector;
     }

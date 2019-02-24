@@ -4,6 +4,7 @@
 const {JSDOM} = require("jsdom");
 const {getSafetyText} = require('../configs/parsing');
 const {getAttributesFromFoundString} = require('../utils/tags');
+const {getPageRequest} = require('./request-http');
 
 const createVirtualDOM = (HTMLCode) => {
     try {
@@ -13,9 +14,10 @@ const createVirtualDOM = (HTMLCode) => {
         return Promise.reject("Ошибка создания виртуального DOM: " + error);
     }
 };
+const getVirtualDom = (url) => getPageRequest(url).then(createVirtualDOM);
 
 // Найти непосредственно сам элемент
-const findClosestTag = searchText => HTMLCode => {
+const findClosestTag = ({searchText, url}) => HTMLCode => {
     const text = searchText.toLowerCase();
     const fastSearchResult = ~HTMLCode.indexOf(text);
     if (!fastSearchResult) {
@@ -31,7 +33,8 @@ const findClosestTag = searchText => HTMLCode => {
             attributes: {...attributesParsed},
             tagName: result[1],
             searchedText: text,
-            resultText: result[3]
+            resultText: result[3],
+            url: url || null
         });
     }
     return Promise.reject({message: 'В HTML странице совпадения не найдены'});
@@ -39,7 +42,8 @@ const findClosestTag = searchText => HTMLCode => {
 
 module.exports = {
     createVirtualDOM,
-    findClosestTag
+    findClosestTag,
+    getVirtualDom
 };
 
 // Пробовал поиск через регулярку родительских тегов с параметрами
