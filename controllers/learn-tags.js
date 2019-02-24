@@ -144,7 +144,11 @@ const searchParentAndGetOnlyTag = (resultSearchingTag) => (virtualDOM) => {
         return Promise.resolve(resultSearchingTag);
     }
 
-    const elementsByTag = virtualDOM.document.getElementsByTagName(tagName);
+    const elementsByTag = selectedMethodic.onlyTag ?
+        virtualDOM.document.getElementsByTagName(tagName)
+        :
+        virtualDOM.document.querySelectorAll(selector);
+        
     if (elementsByTag.length !== elementsLength) {
         return Promise.reject({
             error: `Результаты текущего поиска отличаются от предыдущего (${elementsByTag.length} элементов стало)`,

@@ -15,7 +15,7 @@ const {searchParentAndGetOnlyTag} = require('./controllers/learn-tags');
 // Пользователь указывает страницу и какую информацию он хочет извлечь (текст)
 // Мы пытаемся найти информацию, запоминаем тег, аттрибуты
 const URL = 'https://www.cian.ru/rent/flat/200490359/';
-const TEXT = '2-комн. квартира, 100 м';
+const TEXT = '45 м²';
 getPageRequest(URL)    
     .then(htmlCode => {
         return findClosestTag({searchText: TEXT, url: URL})(htmlCode)
@@ -25,7 +25,8 @@ getPageRequest(URL)
                         searchParentAndGetOnlyTag(chooseMethodForSearchingOnlyTag(tag)(virtualDOM))(virtualDOM)
                             .then(data => {
                                 console.log("DATA : ", data);
-                            });
+                            })
+                            .catch(e => console.log(e));
                     })
             })
     })
