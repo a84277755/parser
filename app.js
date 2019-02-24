@@ -14,8 +14,8 @@ const {searchParentAndGetOnlyTag} = require('./controllers/learn-tags');
 // Обучение (получение информации)
 // Пользователь указывает страницу и какую информацию он хочет извлечь (текст)
 // Мы пытаемся найти информацию, запоминаем тег, аттрибуты
-const URL = 'https://www.vasmann.ru/dileram';
-const TEXT = 'Стабильное немецкое качество продукции';
+const URL = 'https://www.cian.ru/rent/flat/200490359/';
+const TEXT = '2-комн. квартира, 100 м';
 getPageRequest(URL)    
     .then(htmlCode => {
         return findClosestTag({searchText: TEXT, url: URL})(htmlCode)

@@ -133,38 +133,35 @@ const searchParentAndGetOnlyTag = (resultSearchingTag) => (virtualDOM) => {
         resultText
     } = resultSearchingTag;
     if (!resultSearchingTag) {
-        return {error: 'Результаты предыдущего поиска были неуспешны', lastResult: {...resultSearchingTag}};
+        return Promise.reject({error: 'Результаты предыдущего поиска были неуспешны', lastResult: {...resultSearchingTag}});
     }
     if (!url) {
-        return {error: 'Не пришел URL от прошлого запроса', lastResult: {...resultSearchingTag}};
+        return Promise.reject({error: 'Не пришел URL от прошлого запроса', lastResult: {...resultSearchingTag}});
     }
 
     // Если поиск по ID, то на нормальном сайте всего 1 результат и так будет
     if (selectedMethodic.searchById) {
-        return resultSearchingTag;
+        return Promise.resolve(resultSearchingTag);
     }
 
-    // Самые слабые результаты у поиска только по тегу
-    if (selectedMethodic.onlyTag) {
-        const elementsByTag = virtualDOM.document.getElementsByTagName(tagName);
-        if (elementsByTag.length !== elementsLength) {
-            return {
-                error: `Результаты текущего поиска отличаются от предыдущего (${elementsByTag.length} элементов стало)`,
-                lastResult: {...resultSearchingTag}
-            };
-        }
-        const neededElement = elementsByTag[resultNumber - 1];
-        const bestSelector = getBestParentSelector({
-            initialLength: elementsLength,
-            lastLength: elementsLength,
-            virtualDOM,
-            oldSelector: tagName,
-            baseNode: neededElement,
-            url,
-            resultText
+    const elementsByTag = virtualDOM.document.getElementsByTagName(tagName);
+    if (elementsByTag.length !== elementsLength) {
+        return Promise.reject({
+            error: `Результаты текущего поиска отличаются от предыдущего (${elementsByTag.length} элементов стало)`,
+            lastResult: {...resultSearchingTag}
         });
-        return bestSelector;
     }
+    const neededElement = elementsByTag[resultNumber - 1];
+    const bestSelector = getBestParentSelector({
+        initialLength: elementsLength,
+        lastLength: elementsLength,
+        virtualDOM,
+        oldSelector: tagName,
+        baseNode: neededElement,
+        url,
+        resultText
+    });
+    return bestSelector;
 };
 
 module.exports = {
