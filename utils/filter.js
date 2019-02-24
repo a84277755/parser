@@ -13,7 +13,8 @@ const getBestParentSelector = async ({
 }) => {
     const receivedFinalSelector = initialLength === 1 || (lastLength === 1 && sameResult);
     if (receivedFinalSelector) return Promise.resolve(oldSelector);
-    const {length: newLength, selector: newSelector} = getParentSelectorInformation({virtualDOM, oldSelector, baseNode});
+    const {length: newLength, selector: newSelector, badTag} = getParentSelectorInformation({virtualDOM, oldSelector, baseNode});
+    if (badTag) return Promise.resolve(oldSelector);
     const currentLengthNotWorseThenLast = newLength > 1 && newLength <= initialLength && newLength <= lastLength;
     const bestResult = newLength === 1;
     if (!bestResult && !currentLengthNotWorseThenLast && sameResult) {

@@ -19,9 +19,11 @@ const getSelectorFromAttributesDOMNode = (DOMNode) =>
 
 const getParentSelectorInformation = ({virtualDOM, oldSelector, baseNode}) => {
     let parentNode = baseNode.parentNode;
+    const badTagReceived = parentNode.tagName === 'BODY' || parentNode.tagName === 'HEAD'|| parentNode.tagName === 'HTML';
+    if (badTagReceived) return {badTag: true};
     let parentSelector = getSelectorFromAttributesDOMNode(parentNode);
     let newSelector = `${parentSelector} ${oldSelector}`;    
-    return {length: virtualDOM.document.querySelectorAll(newSelector).length, selector: newSelector, oldSelector};
+    return {length: virtualDOM.document.querySelectorAll(newSelector).length, selector: newSelector, oldSelector, badTag: false};
 };
 
 
