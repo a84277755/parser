@@ -1,7 +1,13 @@
 //
 // Здесь происходит поиск по DOM дереву и возвращение результата
 //
-const {getSelectorFromAttributesFromString} = require('../utils/selectors');
+const {
+    getSelectorFromAttributesFromString,
+    getAttributesFromNode,
+    getSelectorFromAttributesDOMNode,
+    getArrayDomElementsWithParentSelector
+} = require('../utils/selectors');
+const {getBestParentSelector} = require('../utils/filter');
 const defaultResultOptions = {
     result: false,
     selectedMethodic: {
@@ -106,8 +112,44 @@ const searchByAttributes = (options, attributesToSkip = []) => (virtualDOM) => {
     return resultObject;
 };
 
+
+// Модификация предыдущих методов
+// Поиск родителя (и определение его селектора) (поиск единственного результата)
+const searchParentAndGetOnlyTag = (resultSearchingTag) => (virtualDOM) => {
+    const {result, selectedMethodic, elementsLength, resultNumber, tagName, selector} = resultSearchingTag;
+    if (!resultSearchingTag) {
+        return {error: 'Результаты предыдущего поиска были неуспешны', lastResult: {...resultSearchingTag}};
+    }
+
+    // Если поиск по ID, то на нормальном сайте всего 1 результат и так будет
+    if (selectedMethodic.searchById) {
+        return resultSearchingTag;
+    }
+
+    // Самые слабые результаты у поиска только по тегу
+    if (selectedMethodic.onlyTag) {
+        const elementsByTag = virtualDOM.document.getElementsByTagName(tagName);
+        if (elementsByTag.length !== elementsLength) {
+            return {
+                error: `Результаты текущего поиска отличаются от предыдущего (${elementsByTag.length} элементов стало)`,
+                lastResult: {...resultSearchingTag}
+            };
+        }
+        const neededElement = elementsByTag[resultNumber - 1];
+        const bestSelector = getBestParentSelector({
+            initialLength: elementsLength,
+            lastLength: elementsLength,
+            virtualDOM,
+            oldSelector: tagName,
+            baseNode: neededElement
+        });
+        return bestSelector;
+    }
+};
+
 module.exports = {
     searchOnlyTag,
     searchById,
-    searchByAttributes
+    searchByAttributes,
+    searchParentAndGetOnlyTag
 };

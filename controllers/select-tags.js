@@ -3,7 +3,8 @@
 //
 const {searchOnlyTag, searchById, searchByAttributes} = require('./learn-tags');
 
-const chooseMethod = (options) => {
+// Базовый поиск по тегу (находим ближайший текст к поисковой строке и его селектор)
+const chooseMethodForSearchingOnlyTag = (options) => {
     const {
         attributes = {},
         parentAttributes = {},
@@ -22,5 +23,5 @@ const chooseMethod = (options) => {
 };
 
 module.exports = {
-    chooseMethod
+    chooseMethodForSearchingOnlyTag
 };

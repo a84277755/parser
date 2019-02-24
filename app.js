@@ -1,6 +1,9 @@
 const {getPageRequest} = require('./controllers/request-http');
 const {createVirtualDOM, findClosestTag} = require('./controllers/parse-tags');
-const {chooseMethod} = require('./controllers/select-tags');
+const {chooseMethodForSearchingOnlyTag} = require('./controllers/select-tags');
+const {searchParentAndGetOnlyTag} = require('./controllers/learn-tags');
+
+// Основная задача - поиск нужного селектора
 
 // ВНИМАНИЕ: при обычном поиске нам нужно будет только смонтировать виртуальный дом и по селектору достать значение
 // В режиме эксплутации действия будут значительно быстрее (сделать создание DOM при загрузке страницы)
@@ -11,13 +14,13 @@ const {chooseMethod} = require('./controllers/select-tags');
 // Обучение (получение информации)
 // Пользователь указывает страницу и какую информацию он хочет извлечь (текст)
 // Мы пытаемся найти информацию, запоминаем тег, аттрибуты
-getPageRequest('http://realtmsk.ru/')    
+getPageRequest('https://www.vasmann.ru/dileram')    
     .then(htmlCode => {
-        return findClosestTag('Продажа недвижимости')(htmlCode)
+        return findClosestTag('Стабильное немецкое качество продукции')(htmlCode)
             .then(tag => {
                 return createVirtualDOM(htmlCode)
                     .then(virtualDOM => {
-                        console.log(chooseMethod(tag)(virtualDOM));
+                        console.log(searchParentAndGetOnlyTag(chooseMethodForSearchingOnlyTag(tag)(virtualDOM))(virtualDOM));
                     })
             })
     })
