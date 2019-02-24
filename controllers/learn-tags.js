@@ -143,8 +143,8 @@ const searchParentAndGetOnlyTag = (resultSearchingTag) => (virtualDOM) => {
     if (selectedMethodic.searchById) {
         return Promise.resolve(resultSearchingTag);
     }
-
-    const elementsByTag = selectedMethodic.onlyTag ?
+    const onlyTagSelected = !!selectedMethodic.onlyTag;
+    const elementsByTag = onlyTagSelected ?
         virtualDOM.document.getElementsByTagName(tagName)
         :
         virtualDOM.document.querySelectorAll(selector);
@@ -160,7 +160,7 @@ const searchParentAndGetOnlyTag = (resultSearchingTag) => (virtualDOM) => {
         initialLength: elementsLength,
         lastLength: elementsLength,
         virtualDOM,
-        oldSelector: tagName,
+        oldSelector: onlyTagSelected ? tagName : selector,
         baseNode: neededElement,
         url,
         resultText

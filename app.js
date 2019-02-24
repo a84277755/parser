@@ -14,17 +14,17 @@ const {searchParentAndGetOnlyTag} = require('./controllers/learn-tags');
 // Обучение (получение информации)
 // Пользователь указывает страницу и какую информацию он хочет извлечь (текст)
 // Мы пытаемся найти информацию, запоминаем тег, аттрибуты
-const URL = 'https://www.cian.ru/rent/flat/200490359/';
-const TEXT = '45 м²';
+const URL = 'https://www.avito.ru/moskva/zapchasti_i_aksessuary/steklo_zadnee_pravoe_sitroen_s4_1278976513';
+const TEXT = 'Стекло заднее правое Ситроен С4';
 getPageRequest(URL)    
     .then(htmlCode => {
         return findClosestTag({searchText: TEXT, url: URL})(htmlCode)
             .then(tag => {
                 return createVirtualDOM(htmlCode)
                     .then(virtualDOM => {
-                        searchParentAndGetOnlyTag(chooseMethodForSearchingOnlyTag(tag)(virtualDOM))(virtualDOM)
-                            .then(data => {
-                                console.log("DATA : ", data);
+                        return searchParentAndGetOnlyTag(chooseMethodForSearchingOnlyTag(tag)(virtualDOM))(virtualDOM)
+                            .then(selector => {
+                                console.log("selector : ", selector);
                             })
                             .catch(e => console.log(e));
                     })
