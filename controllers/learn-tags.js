@@ -165,7 +165,7 @@ const searchParentAndGetOnlyTag = (resultSearchingTag) => (virtualDOM) => {
         url,
         resultText
     });
-    return bestSelector;
+    return {...resultSearchingTag, selector: bestSelector};
 };
 
 module.exports = {

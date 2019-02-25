@@ -1,7 +1,4 @@
-const {getPageRequest} = require('./controllers/request-http');
-const {createVirtualDOM, findClosestTag} = require('./controllers/parse-tags');
-const {chooseMethodForSearchingOnlyTag} = require('./controllers/select-tags');
-const {searchParentAndGetOnlyTag} = require('./controllers/learn-tags');
+const {getOneSelector} = require('./controllers/get-selectors');
 
 // Основная задача - поиск нужного селектора
 
@@ -14,21 +11,16 @@ const {searchParentAndGetOnlyTag} = require('./controllers/learn-tags');
 // Обучение (получение информации)
 // Пользователь указывает страницу и какую информацию он хочет извлечь (текст)
 // Мы пытаемся найти информацию, запоминаем тег, аттрибуты
-const URL = 'https://www.avito.ru/moskva/zapchasti_i_aksessuary/steklo_zadnee_pravoe_sitroen_s4_1278976513';
-const TEXT = 'Стекло заднее правое Ситроен С4';
-getPageRequest(URL)    
-    .then(htmlCode => {
-        return findClosestTag({searchText: TEXT, url: URL})(htmlCode)
-            .then(tag => {
-                return createVirtualDOM(htmlCode)
-                    .then(virtualDOM => {
-                        return searchParentAndGetOnlyTag(chooseMethodForSearchingOnlyTag(tag)(virtualDOM))(virtualDOM)
-                            .then(selector => {
-                                console.log("selector : ", selector);
-                            })
-                            .catch(e => console.log(e));
-                    })
-            })
+const URL = 'https://toster.ru/q/353548';
+const TEXT = 'Как конвертировать с windows-1251 в utf-8?';
+// вынести в отдельный метод с промисом, возвращает селектор в промисе
+// добавить возможность прогнать пачку ключей для одной страницы
+// Сделать отдельный общий метод, который принимает объект {url, keys} и прогнать пачкой
+getOneSelector({url: URL, searchText: TEXT})
+    .then(selector => {
+        console.log(selector);
     })
-    .catch(e => console.log('Ошибка получени ответа от сервера: ', e));
+    .catch(e => {
+        console.log('error: ', e);
+    });
     
