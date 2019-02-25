@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "iconv-lite": "^0.4.24",
     "jsdom": "13.2.0"
   },
   "devDependencies": {

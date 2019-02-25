@@ -3,6 +3,8 @@
 //
 const https = require('https');
 const http = require('http');
+const iconv = require('iconv-lite');
+const {isCharsetWindows1251, getClearedData} = require('../utils/encoding');
 
 const createRequest = ({hostname, path, protocol}) => {
     const options = {
@@ -21,17 +23,26 @@ const createRequest = ({hostname, path, protocol}) => {
             if (res.statusCode !== 200) {
                 return reject('Код ответа от сервера отличается от 200 (' + res.statusCode + ')');
             }
+            const charsetWindows1251 = isCharsetWindows1251(res.headers['content-type']);
             let receivedData = '';
-            res.setEncoding('utf8');
-            res.on('data', (chunk) => {
-                receivedData += chunk.toString()
-                    .replace(/&ndash;/g,'-')
-                    .replace(/(&nbsp;)|(<br>)|(<br\/>)|(<br \/>)|(\s{2,})/g,' ')
-                    .toLowerCase();
-            });
-            res.on('end', () => {
-              resolve(receivedData);
-            });
+
+            if (!charsetWindows1251) {
+                res.on('data', (chunk) => {
+                    receivedData += getClearedData(chunk);            
+                });
+                res.on('end', () => {
+                     resolve(receivedData);
+                });
+            } else {
+                const converterStream = iconv.decodeStream('win1251');
+                res.pipe(converterStream);
+                converterStream.on('data', function(chunk) {
+                    receivedData += getClearedData(chunk);
+                });
+                converterStream.on('end', () => {
+                     resolve(receivedData);
+                });
+            }
         });
           
         req.on('error', (e) => {

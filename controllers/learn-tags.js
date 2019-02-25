@@ -156,7 +156,7 @@ const searchParentAndGetOnlyTag = (resultSearchingTag) => (virtualDOM) => {
         });
     }
     const neededElement = elementsByTag[resultNumber - 1];
-    const bestSelector = getBestParentSelector({
+    return getBestParentSelector({
         initialLength: elementsLength,
         lastLength: elementsLength,
         virtualDOM,
@@ -164,8 +164,7 @@ const searchParentAndGetOnlyTag = (resultSearchingTag) => (virtualDOM) => {
         baseNode: neededElement,
         url,
         resultText
-    });
-    return {...resultSearchingTag, selector: bestSelector};
+    }).then(bestSelector => ({...resultSearchingTag, selector: bestSelector}));
 };
 
 module.exports = {
