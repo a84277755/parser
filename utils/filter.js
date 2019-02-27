@@ -9,15 +9,20 @@ const getBestParentSelector = async ({
     baseNode,
     url,
     resultText,
-    sameResult = false
+    needParseAgain = false
 }) => {
-    const receivedFinalSelector = initialLength === 1 || (lastLength === 1 && sameResult);
+    const receivedFinalSelector = initialLength === 1 || (lastLength === 1 && needParseAgain);
     if (receivedFinalSelector) return Promise.resolve(oldSelector);
-    const {length: newLength, selector: newSelector, badTag} = getParentSelectorInformation({virtualDOM, oldSelector, baseNode});
+    const {
+        length: newLength,
+        selector: newSelector,
+        badTag,
+        needToContinueParsing
+    } = getParentSelectorInformation({virtualDOM, oldSelector, baseNode});
     if (badTag) return Promise.resolve(oldSelector);
     const currentLengthNotWorseThenLast = newLength > 1 && newLength <= initialLength && newLength <= lastLength;
     const bestResult = newLength === 1;
-    if (!bestResult && !currentLengthNotWorseThenLast && sameResult) {
+    if (!bestResult && !currentLengthNotWorseThenLast && needParseAgain) {
         return Promise.resolve(oldSelector);
     }
     const sameResultReceived = await checkLastAndCurrentParams({
@@ -30,8 +35,9 @@ const getBestParentSelector = async ({
     if (sameResultReceived && bestResult) {
         return Promise.resolve(newSelector);
     }
-    const uselessSelectorModificator = newLength === lastLength || !sameResultReceived;
-    return getBestParentSelector({ // @TODO научиться выкидывать динамичные айдишники
+    const needMoreIterations = !sameResultReceived || needToContinueParsing;
+    const uselessSelectorModificator = newLength === lastLength && !needMoreIterations;
+    return getBestParentSelector({
         initialLength,
         lastLength: newLength,
         virtualDOM,
@@ -39,7 +45,7 @@ const getBestParentSelector = async ({
         baseNode: baseNode.parentNode,
         url,
         resultText,
-        sameResult: sameResultReceived
+        needParseAgain: needMoreIterations
     });
 };
 

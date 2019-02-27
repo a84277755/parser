@@ -11,8 +11,8 @@ const {getOneSelector} = require('./controllers/get-selectors');
 // Обучение (получение информации)
 // Пользователь указывает страницу и какую информацию он хочет извлечь (текст)
 // Мы пытаемся найти информацию, запоминаем тег, аттрибуты
-const URL = 'https://www.pleer.ru/product_518027_240Gb_Silicon_Power_M10_mSATA_SP240GBSS3M10MFF.html';
-const TEXT = 'Жесткий диск 240Gb - Silicon Power M10 mSATA SP240GBSS3M10MFF';
+const URL = 'https://www.cian.ru/sale/flat/199599856/';
+const TEXT = '23 м';
 // вынести в отдельный метод с промисом, возвращает селектор в промисе
 // добавить возможность прогнать пачку ключей для одной страницы
 // Сделать отдельный общий метод, который принимает объект {url, keys} и прогнать пачкой
