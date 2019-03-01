@@ -25,18 +25,21 @@ const getBestParentSelector = async ({
     if (!bestResult && !currentLengthNotWorseThenLast && needParseAgain) {
         return Promise.resolve(oldSelector);
     }
-    const sameResultReceived = await checkLastAndCurrentParams({
+    const {
+        badReselect,
+        sameData: sameResultReceived
+    } = await checkLastAndCurrentParams({
         selector: newSelector,
         url,
         lastLength: newLength,
         resultText
     });
     
-    if (sameResultReceived && bestResult) {
+    if (sameResultReceived && bestResult && !badReselect) {
         return Promise.resolve(newSelector);
     }
-    const needMoreIterations = !sameResultReceived || needToContinueParsing;
-    const uselessSelectorModificator = newLength === lastLength && !needMoreIterations;
+    const needMoreIterations = (!sameResultReceived || needToContinueParsing) && !badReselect;
+    const uselessSelectorModificator = (newLength === lastLength && !needMoreIterations) || badReselect;
     return getBestParentSelector({
         initialLength,
         lastLength: newLength,
@@ -54,8 +57,11 @@ const checkLastAndCurrentParams = ({selector, url, lastLength, resultText}) => {
         .then(virtualDOM => {
             let sameData = false;
             const result = virtualDOM.document.querySelectorAll(selector);
+            if (!result.length) {
+                return {badReselect: true, sameData};
+            }
             if (lastLength !== result.length) {
-                return sameData;
+                return {badReselect: false, sameData};
             }
             [...result].forEach(data => {
                 if (sameData) return;
@@ -63,7 +69,7 @@ const checkLastAndCurrentParams = ({selector, url, lastLength, resultText}) => {
                     sameData = true;
                 }
             });
-            return sameData;
+            return {badReselect: false, sameData};
         });
 };
 

@@ -14,7 +14,9 @@ const createRequest = ({hostname, path, protocol}) => {
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9',
             'Accept-Language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7',
             'Host': hostname,
-            'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.109 Safari/537.36'
+            'Upgrade-Insecure-Requests': '1',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36',
+            
         }
     };
     const protocolHTTP = protocol === 'https' ? https : http;
@@ -31,7 +33,7 @@ const createRequest = ({hostname, path, protocol}) => {
                     receivedData += getClearedData(chunk);            
                 });
                 res.on('end', () => {
-                     resolve(receivedData);
+                    resolve(receivedData);
                 });
             } else {
                 const converterStream = iconv.decodeStream('win1251');

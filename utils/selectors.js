@@ -34,10 +34,47 @@ const getParentSelectorInformation = ({virtualDOM, oldSelector, baseNode}) => {
     };
 };
 
+allSelectorsAreSame = (selectors) => {
+    if (!selectors && !selectors.length) return false;
+    const [baseSelector, ...anySelectors] = selectors;
+    return !anySelectors.some(selector => selector !== baseSelector);
+};
+
+// Данный метод вызывается когда присутствует хотя бы 1 отличный селектор
+searchSamePathSelector = (selectors) => {
+    if (!selectors && !selectors.length) return false;
+    const differentSelectors = selectors.reduce((result, selector) => 
+        result.find(savedSelector => savedSelector === selector) ? result : [...result, selector]
+    , []);
+    const selectorsByParts = differentSelectors.map(selector => selector.split(' '));
+
+    // Определим, отличаются ли единственные селекторы
+    let problemWithChoseSelector = false;
+    selectorsByParts.forEach((selector, i, arr) => {
+        if (
+            !problemWithChoseSelector &&
+            selector.length === 1 && 
+            arr.some(anotherSelector => anotherSelector.length === 1 && selector[0] !== anotherSelector[0])
+        )   {
+                problemWithChoseSelector = true;
+            }
+    });
+    if (problemWithChoseSelector) {
+        return {error: 'Базовые селекторы отличаются, возможно, вы выбрали не идентичные участки для поиска селектора'};
+    }
+
+    
+
+    // console.log(selectors);
+    console.log(differentSelectors);
+    // console.log(selectorsByParts);
+
+}
 
 module.exports = {
     getSelectorFromAttributesFromString,
     getAttributesFromNode,
     getSelectorFromAttributesDOMNode,
-    getParentSelectorInformation
+    getParentSelectorInformation,
+    allSelectorsAreSame
 };

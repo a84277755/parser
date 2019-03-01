@@ -1,4 +1,5 @@
 const {getOneSelector, getSelectorFromDifferentPages} = require('./controllers/get-selectors');
+const {allSelectorsAreSame} = require('./utils/selectors');
 
 // Основная задача - поиск нужного селектора
 
@@ -11,12 +12,10 @@ const {getOneSelector, getSelectorFromDifferentPages} = require('./controllers/g
 // Обучение (получение информации)
 // Пользователь указывает страницу и какую информацию он хочет извлечь (текст)
 // Мы пытаемся найти информацию, запоминаем тег, аттрибуты
-const URL = 'https://www.cian.ru/sale/flat/199599856/';
-const TEXT = '23 м';
 const dataToParse = [
-    {searchText: 'Апартаменты-студия, 45 м', url: 'https://www.cian.ru/sale/flat/197560571/'},
-    {searchText: '3-комн. квартира, 139 м', url: 'https://www.cian.ru/sale/flat/200992024/'},
-    {searchText: '3-комн. квартира, 145 м', url: 'https://www.cian.ru/sale/flat/200992028/'}
+    {searchText: 'Обработка заявки до 30 минут', url: 'https://www.vasmann.ru/dileram'},
+    {searchText: 'Дополнительные скидки до 15% на крупный опт', url: 'https://www.vasmann.ru/dileram'},
+    {searchText: 'Доставка герметиков', url: 'https://www.vasmann.ru/dileram'}
 ];
 // вынести в отдельный метод с промисом, возвращает селектор в промисе
 // добавить возможность прогнать пачку ключей для одной страницы
@@ -29,9 +28,27 @@ const dataToParse = [
 //         console.log('error: ', e);
 //     });
     
+// getOneSelector(dataToParse[0])
+//     .then(selector => {
+//             console.log(selector);
+//         })
+//         .catch(e => {
+//             console.log('error: ', e);
+//         });
+
 getSelectorFromDifferentPages(dataToParse)
     .then(selectors => {
-        console.log(selectors.map(({selector}) => selector));
+        const modifiedSelectors = selectors.map(({selector}) => selector);
+        if (allSelectorsAreSame(modifiedSelectors)) {
+            console.log('same');
+            return {
+                allSelectorsAreSame: true,
+                selector: modifiedSelectors[0],
+                parsingInformation: selectors
+            };
+        } else {
+            console.log(searchSamePathSelector(modifiedSelectors));
+        }
     })
     .catch(e => {
         console.log('error: ', e);
