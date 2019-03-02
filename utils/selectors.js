@@ -63,11 +63,23 @@ searchSamePathSelector = (selectors) => {
         return {error: 'Базовые селекторы отличаются, возможно, вы выбрали не идентичные участки для поиска селектора'};
     }
 
-    
+    // Поиск минимального общего решения
+    // Здесь мы можем делить по ' ', т.к. ищем полное минимальное совпадение
+    const [minLengthSplittedSelector, ...otherSplittedSelectors] = selectorsByParts.sort((a, b) => a.length > b.length ? 1 : -1);
+    let minSelectorFound = otherSplittedSelectors.reduce((result, selectorByPaths) => {
+        const allPathsFound = minLengthSplittedSelector.reduce((pathsFound, selectorPath) => 
+            [...pathsFound, !!selectorByPaths.find(otherSelectorsPath => selectorPath === otherSelectorsPath)]
+        ,[]).every(minPathFound => minPathFound);
+        return [...result, allPathsFound];
+    }, []).every(selectorFound => selectorFound);
+    if (minSelectorFound) {
+        return {
+            minSelectorFound,
+            selector: minLengthSplittedSelector.join(' ')
+        }
+    }
 
-    // console.log(selectors);
-    console.log(differentSelectors);
-    // console.log(selectorsByParts);
+    return
 
 }
 

@@ -40,15 +40,31 @@ getSelectorFromDifferentPages(dataToParse)
     .then(selectors => {
         const modifiedSelectors = selectors.map(({selector}) => selector);
         if (allSelectorsAreSame(modifiedSelectors)) {
-            console.log('same');
             return {
                 allSelectorsAreSame: true,
+                minSelectorFound: false,
                 selector: modifiedSelectors[0],
                 parsingInformation: selectors
             };
         } else {
-            console.log(searchSamePathSelector(modifiedSelectors));
+            const resultSearchingCommonSelector = searchSamePathSelector(modifiedSelectors);
+            if (resultSearchingCommonSelector.minSelectorFound) {
+                return {
+                    allSelectorsAreSame: false,
+                    minSelectorFound: true,
+                    selector: resultSearchingCommonSelector.selector,
+                    parsingInformation: selectors
+                };
+            }
+            return {
+                allSelectorsAreSame: false,
+                minSelectorFound: false,
+                parsingInformation: selectors
+            };
         }
+    })
+    .then(data => {
+        console.log(data);
     })
     .catch(e => {
         console.log('error: ', e);
