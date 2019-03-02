@@ -78,9 +78,7 @@ searchSamePathSelector = (selectors) => {
             selector: minLengthSplittedSelector.join(' ')
         }
     }
-
-    return
-
+    // Здесь могут быть возможные улучшения поиска селектора
 }
 
 module.exports = {

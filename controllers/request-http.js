@@ -56,6 +56,9 @@ const createRequest = ({hostname, path, protocol}) => {
 };
 
 const getPageRequest = (url, useChromeForParsing) => {
+    if (!url || typeof url !== 'string' || !~url.indexOf('://')) {
+        return Promise.reject({"error": "Некорректный URL"});
+    }
     const [protocol, URLadress] = url.split('://');
 
     if (protocol !== 'http' && protocol !== 'https') {
@@ -79,7 +82,7 @@ const getWithChromePageRequest = async (url) => {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
     await page.goto(url);
-    await page.waitFor(1000);
+    await page.waitFor(500);
     const bodyHandle = await page.$('body');
     const html = await page.evaluate(body => body.innerHTML, bodyHandle);
     browser.close();
