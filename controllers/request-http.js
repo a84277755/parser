@@ -4,6 +4,7 @@
 const https = require('https');
 const http = require('http');
 const iconv = require('iconv-lite');
+const puppeteer = require('puppeteer');
 const {isCharsetWindows1251, getClearedData} = require('../utils/encoding');
 
 const createRequest = ({hostname, path, protocol}) => {
@@ -54,14 +55,35 @@ const createRequest = ({hostname, path, protocol}) => {
     });    
 };
 
-const getPageRequest = (url) => {
+const getPageRequest = (url, useChromeForParsing) => {
     const [protocol, URLadress] = url.split('://');
+
     if (protocol !== 'http' && protocol !== 'https') {
         return Promise.reject('Некорректный протокол в URL, получен: ' + protocol);
     }
-    const [hostname, ...pathArray] = URLadress.split('/');
-    const path = '/' + pathArray.join('/');
-    return createRequest({hostname, path, protocol});
+
+    if (useChromeForParsing) {
+        return new Promise((resolve, reject) => {
+            return getWithChromePageRequest(url)
+                .then(resolve)
+                .catch(reject);
+        });
+    } else { 
+        const [hostname, ...pathArray] = URLadress.split('/');
+        const path = '/' + pathArray.join('/');
+        return createRequest({hostname, path, protocol});
+    }
+};
+
+const getWithChromePageRequest = async (url) => {
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    await page.goto(url);
+    await page.waitFor(1000);
+    const bodyHandle = await page.$('body');
+    const html = await page.evaluate(body => body.innerHTML, bodyHandle);
+    browser.close();
+    return getClearedData(html);
 };
 
 module.exports = {getPageRequest};
