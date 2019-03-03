@@ -4,10 +4,8 @@ const isCharsetWindows1251 = (contentType) => {
 
 const getClearedData = (chunk) => {
     return chunk.toString('utf8')
-        // .replace(/\\u[\da-f]{4}/gi, match => String.fromCharCode(parseInt(match.replace('\\u', ''), 16)))
         .replace(/&ndash;/g,'-')
-        .replace(/(&nbsp;)|(<br>)|(<br\/>)|(<br \/>)|(\s{2,})|(\\n)/g,' ')
-        .toLowerCase();  
+        .replace(/(&nbsp;)|(<br>)|(<br\/>)|(<br \/>)|(\s{2,})|(\\n)/g,' ');
 };
 
 module.exports = {

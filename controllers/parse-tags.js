@@ -18,12 +18,11 @@ const getVirtualDom = (url) => getPageRequest(url).then(createVirtualDOM);
 
 // Найти непосредственно сам элемент
 const findClosestTag = ({searchText, url}) => HTMLCode => {
-    const text = searchText.toLowerCase();
-    const fastSearchResult = ~HTMLCode.indexOf(text);
+    const fastSearchResult = ~HTMLCode.indexOf(searchText);
     if (!fastSearchResult) {
         return Promise.reject({message: 'В HTML странице совпадения не найдены (быстрый прогон)'});
     }
-    const regExp = new RegExp('<([\\d\\w]{1,10})([\\s\\d\\w\'\"\;\#\-\=]{0,200})>(.{0,3}' + getSafetyText(text) + '.{0,3})<\/\\1>');
+    const regExp = new RegExp('<([\\d\\w]{1,10})([\\s\\d\\w\'\"\;\#\-\=]{0,200})>(.{0,3}' + getSafetyText(searchText) + '.{0,3})<\/\\1>');
     const result = HTMLCode.match(regExp);
     if (result) {
         let attributes = {};
@@ -32,7 +31,7 @@ const findClosestTag = ({searchText, url}) => HTMLCode => {
         return Promise.resolve({
             attributes: {...attributesParsed},
             tagName: result[1],
-            searchedText: text,
+            searchedText: searchText,
             resultText: result[3],
             url: url || null
         });
