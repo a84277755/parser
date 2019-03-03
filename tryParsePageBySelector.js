@@ -8,16 +8,13 @@ const findTextBySelector = async (url, selector) => {
     const pageContent = await page.$eval(selector, 
     selector => selector.innerHTML);
     browser.close();
-    return pageContent;
+    console.log('URL: ' + url + '\nСелектор: ', selector + '\n Текст: ' + pageContent);
 }
 
 findTextBySelector(
-    'https://youla.ru/moskva/dom-dacha/stoly-stulya/stol-kukhonnyi-i-taburietki-5c7ace6622a4495f1a168738', 
+    'https://youla.ru/moskva/zhivotnye/sobaki/propala-sobaka-5c7be25766fb07948c282d37', 
     'p[class=\"sc-kDgGX OHZMS sc-bdVaJa jqQFve\"][variant=\"caption5,caption4\"][color=\"primary\"]'
 )
-    .then(data => {
-        console.log('Нашли: ', data);
-    })
     .catch(e => {
         console.log(e);
     })

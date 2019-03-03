@@ -15,15 +15,15 @@ const createRequest = ({hostname, path, protocol}) => {
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9',
             'Accept-Language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7',
             'Host': hostname,
-            'Upgrade-Insecure-Requests': '1',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36',
-            
+            'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 \
+                (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36',            
         }
     };
     const protocolHTTP = protocol === 'https' ? https : http;
     return new Promise((resolve, reject) => {
         const req = protocolHTTP.request(options, (res) => {
             if (res.statusCode !== 200) {
+                console.log(res);
                 return reject('Код ответа от сервера отличается от 200 (' + res.statusCode + ')');
             }
             const charsetWindows1251 = isCharsetWindows1251(res.headers['content-type']);
