@@ -15,6 +15,3 @@ findTextBySelector(
     'https://youla.ru/moskva/zhivotnye/sobaki/propala-sobaka-5c7be25766fb07948c282d37', 
     'p[class=\"sc-kDgGX OHZMS sc-bdVaJa jqQFve\"][variant=\"caption5,caption4\"][color=\"primary\"]'
 )
-    .catch(e => {
-        console.log(e);
-    })
