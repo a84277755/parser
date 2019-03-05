@@ -12,18 +12,18 @@ const getBestParentSelector = async ({
     needParseAgain = false
 }) => {
     const receivedFinalSelector = initialLength === 1 || (lastLength === 1 && needParseAgain);
-    if (receivedFinalSelector) return Promise.resolve(oldSelector);
+    if (receivedFinalSelector) return Promise.resolve({selector: oldSelector, lastLength});
     const {
         length: newLength,
         selector: newSelector,
         badTag,
         needToContinueParsing
     } = getParentSelectorInformation({virtualDOM, oldSelector, baseNode});
-    if (badTag) return Promise.resolve(oldSelector);
+    if (badTag) return Promise.resolve({selector: oldSelector, lastLength});
     const currentLengthNotWorseThenLast = newLength > 1 && newLength <= initialLength && newLength <= lastLength;
     const bestResult = newLength === 1;
     if (!bestResult && !currentLengthNotWorseThenLast && needParseAgain) {
-        return Promise.resolve(oldSelector);
+        return Promise.resolve({selector: oldSelector, lastLength: newLength});
     }
     const {
         badReselect,
@@ -36,7 +36,7 @@ const getBestParentSelector = async ({
     });
     
     if (sameResultReceived && bestResult && !badReselect) {
-        return Promise.resolve(newSelector);
+        return Promise.resolve({selector: newSelector, lastLength: newLength});
     }
     const needMoreIterations = (!sameResultReceived || needToContinueParsing) && !badReselect;
     const uselessSelectorModificator = (newLength === lastLength && !needMoreIterations) || badReselect;

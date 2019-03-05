@@ -164,7 +164,7 @@ const searchParentAndGetOnlyTag = (resultSearchingTag) => (virtualDOM) => {
         baseNode: neededElement,
         url,
         resultText
-    }).then(bestSelector => ({...resultSearchingTag, selector: bestSelector}));
+    }).then(({selector: bestSelector, lastLength}) => ({...resultSearchingTag, selector: bestSelector, lastLength}));
 };
 
 module.exports = {
