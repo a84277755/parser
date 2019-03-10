@@ -1,6 +1,8 @@
 const http = require('http');
 const {getOneSelector, getSelectorFromDifferentPages} = require('./controllers/get-selectors');
 
+// @TODO find relative with closest neighbours (if you add neighbour - you will receive full content of children)
+
 http.createServer((req, res) => {
     if (req.url === '/favicon.ico') {
         res.statusCode = 404;
@@ -43,27 +45,23 @@ http.createServer((req, res) => {
     return res.end(`
         searchText (string, обязательный параметр) - текст для поиска на странице (+- 3 символа слева и справа)
         url (string, обязательный параметр) - URL, который будет парситься
-        htmlAnotherWayToReceive (boolean, не обязательный параметр) - для парсинга использовать альтернативный способ (через puppeteer, для CSR React и др.) 
 
         Для проверки нескольких страниц используйте POST запрос (на любой URL) вида:
         [
             {
                 "searchText": "Обеденный стол трансформер",
-                "url": "https://youla.ru/moskva/dom-dacha/stoly-stulya/obiediennyi-stol-transformier-5c6e5d56c6ab9e2f9a3fc54c",
-                "htmlAnotherWayToReceive": true
+                "url": "https://youla.ru/moskva/dom-dacha/stoly-stulya/obiediennyi-stol-transformier-5c6e5d56c6ab9e2f9a3fc54c"
             },
             {
                 "searchText": "Стол кухонный и табуретки",
-                "url": "https://youla.ru/moskva/dom-dacha/stoly-stulya/stol-kukhonnyi-i-taburietki-5c7ace6622a4495f1a168738",
-                "htmlAnotherWayToReceive": true
+                "url": "https://youla.ru/moskva/dom-dacha/stoly-stulya/stol-kukhonnyi-i-taburietki-5c7ace6622a4495f1a168738"
             }
         ]
 
         Для проверки только одной страницы используйте POST запрос вида:
         {
             "searchText": "Обеденный стол трансформер",
-            "url": "https://youla.ru/moskva/dom-dacha/stoly-stulya/obiediennyi-stol-transformier-5c6e5d56c6ab9e2f9a3fc54c",
-            "htmlAnotherWayToReceive": true
+            "url": "https://youla.ru/moskva/dom-dacha/stoly-stulya/obiediennyi-stol-transformier-5c6e5d56c6ab9e2f9a3fc54c"
         }
     `);
 }

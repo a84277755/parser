@@ -4,8 +4,8 @@ const {chooseMethodForSearchingOnlyTag} = require('./select-tags');
 const {searchParentAndGetOnlyTag} = require('./learn-tags');
 
 // Get only one selector from web page
-const getOneSelector = ({url, searchText, htmlAnotherWayToReceive = false}) => {
-        return getPageRequest(url, htmlAnotherWayToReceive)
+const getOneSelector = ({url, searchText}) => {
+        return getPageRequest(url)
             .then(htmlCode => {
                 return findClosestTag({searchText, url})(htmlCode)
                     .then(tag => {
