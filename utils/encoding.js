@@ -1,4 +1,3 @@
-
 const getClearedData = (chunk) => {
     return chunk.toString('utf8')
         .replace(/&ndash;/g,'-')

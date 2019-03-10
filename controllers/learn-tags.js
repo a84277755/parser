@@ -1,12 +1,7 @@
 //
 // Здесь происходит поиск по DOM дереву и возвращение результата
 //
-const {
-    getSelectorFromAttributesFromString,
-    getAttributesFromNode,
-    getSelectorFromAttributesDOMNode,
-    getArrayDomElementsWithParentSelector
-} = require('../utils/selectors');
+const {getSelectorFromAttributesFromString} = require('../utils/selectors');
 const {getBestParentSelector} = require('../utils/filter');
 const defaultResultOptions = {
     result: false,
