@@ -1,11 +1,9 @@
 const http = require('http');
 const {getOneSelector, getSelectorFromDifferentPages} = require('./controllers/get-selectors');
 
-// @TODO change JSDom to Cheerio
 // @TODO find relative with closest neighbours (if you add neighbour - you will receive full content of children)
 // @TODO write primitive tests to check web site
 // @TODO refactor code
-// @TODO add opportunity to select only part tag to search full text
 
 http.createServer((req, res) => {
     if (req.url === '/favicon.ico') {
