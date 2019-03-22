@@ -118,7 +118,6 @@ const searchByAttributes = (options, attributesToSkip = []) => (virtualDOM) => {
 // Поиск родителя (и определение его селектора) (поиск единственного результата)
 const searchParentAndGetOnlyTag = (resultSearchingTag) => (virtualDOM) => {
     const {
-        result,
         selectedMethodic,
         elementsLength,
         resultNumber,

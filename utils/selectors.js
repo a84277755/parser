@@ -1,6 +1,9 @@
-const {tagsToBreakParsing, tagsToContinueParsing} = require('../configs/parsing');
+const {tagsToBreakParsing, tagsToContinueParsing, attributesToSkip} = require('../configs/parsing');
 // Селектор получаем из объекта
 const getSelectorFromAttributesFromString = (attributes) => Object.keys(attributes).reduce((result, key) => {
+    if (attributesToSkip.includes(key)) {
+        return result;
+    }
     const selector = attributes[key] === true ? key : `${key}="${attributes[key]}"`;
     return `${result}[${selector}]`;
 }, '');
