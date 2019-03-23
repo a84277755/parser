@@ -1,9 +1,5 @@
 const http = require('http');
-const {getOneSelector, getSelectorFromDifferentPages} = require('./controllers/get-selectors');
-
-// @TODO find relative with closest neighbours (if you add neighbour - you will receive full content of children)
-// @TODO write primitive tests to check web site
-// @TODO refactor code
+const {getOneSelector} = require('./controllers/get-selectors');
 
 http.createServer((req, res) => {
     if (req.url === '/favicon.ico') {
@@ -27,8 +23,7 @@ http.createServer((req, res) => {
             }
             
             if (parsedBody && typeof parsedBody === 'object') {
-                const parseMethod = parsedBody.length ? getSelectorFromDifferentPages : getOneSelector;
-                return parseMethod(parsedBody)
+                return getOneSelector(parsedBody)
                     .then(data => {
                         res.writeHead(200, {'Content-Type': 'application/json'});
                         return res.end(JSON.stringify(data));
