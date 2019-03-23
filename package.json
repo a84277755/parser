@@ -1,7 +1,7 @@
 {
-  "name": "parsingPages",
+  "name": "parsing",
   "version": "1.0.0",
-  "description": "demonstrating parsing selector from entered text",
+  "description": "demonstrating parsing CSS selector from entered text and URL",
   "main": "index.js",
   "scripts": {
     "start": "node app"
@@ -12,8 +12,5 @@
   "dependencies": {
     "jsdom": "13.2.0",
     "puppeteer": "1.12.2"
-  },
-  "devDependencies": {
-    "jest": "^24.1.0"
   }
 }
