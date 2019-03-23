@@ -1,3 +1,8 @@
+//
+// Здесь будет весь цикл получения CSS селектора из текста и URL
+// (на высоком уровне абстракции)
+//
+
 const {getPageRequest} = require('./request-http');
 const {createVirtualDOM, findClosestTag} = require('./parse-tags');
 const {chooseMethodForSearchingOnlyTag} = require('./select-tags');

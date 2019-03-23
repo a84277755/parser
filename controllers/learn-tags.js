@@ -43,7 +43,7 @@ const searchOnlyTag = (options) => (virtualDOM) => {
     return resultObject;
 };
 
-// Эффективный способ, но не часто пригодится
+// Эффективный способ, но не часто есть возможность использовать
 const searchById = (options) => (virtualDOM) => {
     if (!options.attributes.id) {
         return false;
