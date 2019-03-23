@@ -40,25 +40,13 @@ http.createServer((req, res) => {
     } else {
     res.writeHead(200, {'Content-Type': 'text/html; charset=utf8'});
     return res.end(`
-        searchText (string, обязательный параметр) - текст для поиска на странице (+- 3 символа слева и справа)
+        searchText (string, обязательный параметр) - текст для поиска на странице (+- 2000 символов слева и справа)
         url (string, обязательный параметр) - URL, который будет парситься
 
-        Для проверки нескольких страниц используйте POST запрос (на любой URL) вида:
-        [
-            {
-                "searchText": "Обеденный стол трансформер",
-                "url": "https://youla.ru/moskva/dom-dacha/stoly-stulya/obiediennyi-stol-transformier-5c6e5d56c6ab9e2f9a3fc54c"
-            },
-            {
-                "searchText": "Стол кухонный и табуретки",
-                "url": "https://youla.ru/moskva/dom-dacha/stoly-stulya/stol-kukhonnyi-i-taburietki-5c7ace6622a4495f1a168738"
-            }
-        ]
-
-        Для проверки только одной страницы используйте POST запрос вида:
+        Для проверки одной страницы используйте POST запрос вида:
         {
-            "searchText": "Обеденный стол трансформер",
-            "url": "https://youla.ru/moskva/dom-dacha/stoly-stulya/obiediennyi-stol-transformier-5c6e5d56c6ab9e2f9a3fc54c"
+            "searchText": "2-комн. квартира, 47,2 м²",
+            "url": "https://www.cian.ru/sale/flat/202220058/"
         }
     `);
 }
