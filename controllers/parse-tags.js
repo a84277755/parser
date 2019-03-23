@@ -22,7 +22,7 @@ const findClosestTag = ({searchText, url}) => HTMLCode => {
     if (!fastSearchResult) {
         return Promise.reject({message: 'В HTML странице совпадения не найдены (быстрый прогон)'});
     }
-    const regExp = new RegExp('<([\\d\\w]{1,10})([\\s\\d\\w\'\"\;\#\-\=]{0,200})>([^\>\<]{0,2000}' + getSafetyText(searchText) + '[^\<\>]{0,2000})<\/\\1>');
+    const regExp = new RegExp('<([\\d\\w]{1,10})([^\>\<]{0,300})>([^\<\>]{0,2000}' + getSafetyText(searchText) + '[^\>\<]{0,2000})<\/\\1>');
     const result = HTMLCode.match(regExp);
     if (result) {
         let attributes = {};
