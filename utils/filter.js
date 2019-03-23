@@ -22,7 +22,7 @@ const getBestParentSelector = async ({
     if (badTag) return Promise.resolve({selector: oldSelector, lastLength});
     const currentLengthNotWorseThenLast = newLength > 1 && newLength <= initialLength && newLength <= lastLength;
     const bestResult = newLength === 1;
-    if (!bestResult && !currentLengthNotWorseThenLast && needParseAgain) {
+    if (!bestResult && !currentLengthNotWorseThenLast && !needParseAgain) {
         return Promise.resolve({selector: oldSelector, lastLength: newLength});
     }
 
